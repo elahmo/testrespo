@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container my-chart">
+
+      </div>
+
+
+
+    <script>
+    function showChart(value) {
+        var myBarChart = new Chart($("#myChart"), {
+            type: 'bar',
+            data: {
+              labels: ["Games Played" , "Average Min", "FGM", "FGA", "FG %",
+             "3PM", "3PA", "3PT %", "FTM", "FTA", "FT %", "REB", "AST", "STL", "BLK", "TOV", "PPG"],
+                datasets: [{
+                    label: 'Selected Player',
+                    data: value,
+                    backgroundColor:  '#26B99A'
+                  },
+                  {
+                    label: 'League Average',
+                    data: [71, 24, 4.3, 9.3, 0.46, 1.87, 3.3, 0.31, 1.91, 2.46, 0.76, 4.5, 2.5,
+                     0.78, 0.51, 1.41, 11.79],
+                    backgroundColor: "#03586A"
+
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    }
+    $(document).ready(function() {
+        $('#chart-form').on('submit', function(event) {
+            $.ajax({
+                data: {
+                    selectField: $('#selectField').val()
+                },
+                type: 'POST',
+                url: '/process',
+                success: function(result) {
+                    showChart(result.data)
+                }
+            });
+            event.preventDefault();
+        });
+    });
+    </script>
+
+    <div class="container">
+  <canvas  aling='center' id="myChart" width="500" height="300"></canvas>
+</div>
+
+
+<div class="container">
+  <form id="chart-form" class="form-group">
+      <label for="selectField">Select a player</label>
+      <select class="form-control" id="selectField">
+        {% for player in myPlayer %}
+        <option value="{{player.field1}}">{{player.Name}}</option>
+        {% endfor %}
+      </select>
+
+      <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+
+</div>
+{% endblock %}

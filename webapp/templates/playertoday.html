@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<table id="leadersTable">
+	<thead>
+		<th>Name</th>
+		<th>Superhero Name</th>
+		<th>City</th>
+	</thead>
+	<tbody id="leadersBody"></tbody>
+</table>
+<script type=text/javascript>
+$.ajax({
+          url: 'playersupdate',
+          type: 'GET',
+          dataType: 'JSON',
+
+          success:function(data){
+            $(data).each(function(key, value){
+    	console.log(value.name)
+    });
+}
+
+  });
+
+</script>
+
+
+{% endblock %}

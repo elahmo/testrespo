@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+<div class="jumbotron">
+  <div align='center'>
+    <h1>Welcome to the page for {{current_user.username}}</h1>
+
+
+  </div>
+  <div class="container">
+<form c method="POST">
+  {{form.hidden_tag()}}
+
+  {{form.username.label}} {{form.username()}}
+  {{form.email.label}} {{form.email()}}
+  {{form.submit()}}
+</form>
+  </div>
+</div>
+{% endblock content %}
