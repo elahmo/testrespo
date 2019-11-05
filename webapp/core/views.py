@@ -191,41 +191,21 @@ def news_update():
 
     browser.get('https://www.rotoworld.com/sports/nba/basketball')
 
-    article_prof = []
-    titles_full= []
-    body_text = []
-    links = []
-
-    player_name = browser.find_elements_by_xpath('//div[@class="player-news-article__profile"]')
+    player_names = browser.find_elements_by_xpath('//div[@class="player-news-article__profile"]')
     titles_text = browser.find_elements_by_xpath('//div[@class="player-news-article__title"]')
-    text = browser.find_elements_by_xpath('//div[@class="player-news-article__summary"]')
-    images = browser.find_elements_by_tag_name('img')
+    texts = browser.find_elements_by_xpath('//div[@class="player-news-article__summary"]')
 
 
-    for name in player_name:
-        article_prof.append(name.text)
-
-    for title in titles_text:
-        titles_full.append(title.text)
-
-    for whole in text:
-        body_text.append(whole.text)
-
-    for img in images:
-        links.append(img.get_attribute('src'))
-
-    links2= links[1:]
-
-    db_dic = [{
-    'title' : titles_full,
-    'heading' : article_prof,
-    'article' : body_text,
-    'pic' : links2[1::2]
-    }]
+    news_list = []
+    for title, heading, article in zip(titles_text, player_names, texts):
+        news_list.append({
+            'title': title,
+            'heading': heading,
+            'article': article
+        })
 
 
-    db.session.bulk_insert_mappings(News, db_dic, return_defaults=True)
-
+    db.session.bulk_insert_mappings(News, news_list, return_defaults=True)
 
     browser.close()
 
